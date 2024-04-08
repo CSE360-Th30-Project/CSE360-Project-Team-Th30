@@ -271,7 +271,7 @@ public class loginPage extends Application {
             		if(bdInput.getText().length() == 10) {
             			
             	        String currentDirectory = System.getProperty("user.dir");
-            	        String dirName = "P" + fnInput.getText() + lnInput.getText() + bdInput.getText().substring(0,2) + bdInput.getText().substring(3,5) + bdInput.getText().substring(6,10); 
+            	        String dirName = "P" + fnInput.getText() + lnInput.getText() + "_" + bdInput.getText().substring(0,2) + "-" + bdInput.getText().substring(3,5) + "-" + bdInput.getText().substring(6,10);  
             			String directoryPath = currentDirectory + File.separator + "src" + File.separator + "accounts" + File.separator + dirName;
             			String fileName = "patientInfo.txt";
             			String filePath = directoryPath + File.separator + fileName;
@@ -292,7 +292,6 @@ public class loginPage extends Application {
             	                PrintWriter out = new PrintWriter(writer);
             	                out.print("Password: " + psInput.getText());
             	                out.close();
-            	                System.out.print("Got here");
             	            } else {
             	                System.err.println("Failed to create file!");
             	            }
