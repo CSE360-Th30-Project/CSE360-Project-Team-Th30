@@ -105,29 +105,37 @@ public class loginPage extends Application {
                 userInput = user.getText();
                 passInput = password.getText();
                 respondString.setText("");
+                
+                System.out.print(System.getProperty("user.dir")); 
+                String currentDirectory = System.getProperty("user.dir") + File.seperator + "CSE360 Project" + File.seperator + "src" +  File.seperator + "accounts" + File.seperator + userInput;
+                File directory = new File(currentDirectory);
+                
+                
                 if(userInput.isBlank() || passInput.isBlank()) {
                 	respondString.setText("Please fill out all fields.");
                 }
-                else if (userInput.charAt(0) == 'P' && passInput.equals(pPass)) {
-                    buttonResponse('P');
-                    respondString.setText("");
-                    user.setText("");
-                    password.setText("");
-                } 
-                else if (userInput.charAt(0) == 'D' && passInput.equals(pPass)) {
-                	buttonResponse('D');
-                	respondString.setText("");
-                	user.setText("");
-                    password.setText("");
-                    
-                } 
-                else if (userInput.charAt(0) == 'N' && passInput.equals(pPass)) {
-                	buttonResponse('N');
-                	respondString.setText("");
-                	user.setText("");
-                    password.setText("");
-                    
-                } 
+                else if(directory.exists()) {
+                	if (userInput.charAt(0) == 'P' && passInput.equals(pPass)) {
+                        buttonResponse('P');
+                        respondString.setText("");
+                        user.setText("");
+                        password.setText("");
+                    } 
+                    else if (userInput.charAt(0) == 'D' && passInput.equals(pPass)) {
+                    	buttonResponse('D');
+                    	respondString.setText("");
+                    	user.setText("");
+                        password.setText("");
+                        
+                    } 
+                    else if (userInput.charAt(0) == 'N' && passInput.equals(pPass)) {
+                    	buttonResponse('N');
+                    	respondString.setText("");
+                    	user.setText("");
+                        password.setText("");
+                        
+                    } 
+                }
                 else {
                     respondString.setText("Incorrect username or password. Please try again.");
                     password.setText("");
@@ -271,7 +279,7 @@ public class loginPage extends Application {
             		if(bdInput.getText().length() == 10) {
             			
             	        String currentDirectory = System.getProperty("user.dir");
-            	        String dirName = "P" + fnInput.getText() + lnInput.getText() + bdInput.getText().substring(0,2) + bdInput.getText().substring(3,5) + bdInput.getText().substring(6,10);  
+            	        String dirName = "P" + fnInput.getText() + lnInput.getText() + "_" + bdInput.getText().substring(0,2) + "-" + bdInput.getText().substring(3,5) + "-" + bdInput.getText().substring(6,10);  
             			String directoryPath = currentDirectory + File.separator + "accounts" + File.separator + dirName;
             			String fileName = "patientInfo.txt";
             			String filePath = directoryPath + File.separator + fileName;
