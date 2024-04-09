@@ -54,7 +54,7 @@ public class loginPage extends Application {
 
         String currentDirectory = System.getProperty("user.dir");
         String imageName = "HealthCoLogo.jpg";
-        String imagePath = "file:" + currentDirectory + "/src/resources/" + imageName;
+        imagePath = "file:" + currentDirectory + "CSE 360" + File.seperator + "src" + File.separator "resources" + imageName;
         Image logoImage = new Image(imagePath);
         ImageView logo = new ImageView(logoImage);
         logo.setPreserveRatio(true);
@@ -62,7 +62,7 @@ public class loginPage extends Application {
         logo.setFitHeight(225);
 
         imageName = "lock.png";
-        imagePath = "file:" + currentDirectory + "/src/resources/" + imageName;
+        imagePath = "file:" + currentDirectory + "CSE 360" + File.seperator + "src" + File.separator "resources" + imageName;
         Image lockImage = new Image(imagePath);
         ImageView lock = new ImageView(lockImage);
         lock.setPreserveRatio(true);
@@ -70,7 +70,7 @@ public class loginPage extends Application {
         lock.setFitHeight(35);
 
         imageName = "profile.png";
-        imagePath = "file:" + currentDirectory + "/src/resources/" + imageName;
+        imagePath = "file:" + currentDirectory + "CSE 360" + File.seperator + "src" + File.separator "resources" + imageName;
         Image profileImage = new Image(imagePath);
         ImageView profile = new ImageView(profileImage);
         profile.setPreserveRatio(true);
