@@ -273,12 +273,15 @@ public class loginPage extends Application {
             	        String currentDirectory = System.getProperty("user.dir");
             	        String dirName = "P" + fnInput.getText() + lnInput.getText() + bdInput.getText().substring(0,2) + bdInput.getText().substring(3,5) + bdInput.getText().substring(6,10);  
             			String directoryPath = currentDirectory + File.separator + "src" + File.separator + "accounts" + File.separator + dirName;
+            			String directoryPathChat = directoryPath + File.separator + "chat";
             			String fileName = "patientInfo.txt";
             			String filePath = directoryPath + File.separator + fileName;
             	        
             	        File directory = new File(directoryPath);
             	        if (!directory.exists()) {
             	            directory.mkdirs();
+            	            File chats = new File(directoryPathChat);
+            	            chats.mkdirs();
             	        }
             	        else {
             	        	pIntakeLabel.setText("Patient Already Exists.");
