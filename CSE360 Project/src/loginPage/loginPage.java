@@ -281,7 +281,7 @@ public class loginPage extends Application {
             	        String currentDirectory = System.getProperty("user.dir");
             	        String dirName = "P" + fnInput.getText() + lnInput.getText() + "_" + bdInput.getText().substring(0,2) + "-" + bdInput.getText().substring(3,5) + "-" + bdInput.getText().substring(6,10);  
             			String directoryPath = currentDirectory + File.separator + "accounts" + File.separator + dirName;
-            			String fileName = "patientInfo.txt";
+            			String fileName = "patientPass.txt";
             			String filePath = directoryPath + File.separator + fileName;
             	        
             	        File directory = new File(directoryPath);
