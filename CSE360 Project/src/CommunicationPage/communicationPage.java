@@ -29,33 +29,17 @@ public class communicationPage extends Application {
     private Button searchButton = new Button("Search");
     private String enteredUsername;
     private VBox root;
+    private Stage primaryStage;
+    public String uid;
+    
+    public communicationPage(String uid) {
+    	this.uid = uid;
+    }
 
     @Override
     public void start(Stage primaryStage) {
         // Sample list of users
     	root = new VBox();
-    	
-        TextField usernameField = new TextField();
-        TextField passwordField = new TextField();
-        Button loginButton = new Button("Login");
-    	
-        loginButton.setOnAction(event -> {
-            enteredUsername = usernameField.getText().trim();
-            String enteredPassword = passwordField.getText().trim();
-            if (login(enteredUsername, enteredPassword)) {
-                // Successful login, remove login section
-                VBox root = (VBox) primaryStage.getScene().getRoot();
-                root.getChildren().remove(0); // Remove login box
-                root.setPadding(new Insets(10)); // Adjust padding
-                root.setSpacing(10); // Adjust spacing
-                loadUserIds();
-            } else {
-                // Incorrect credentials
-                System.out.println("Invalid username or password");
-            }
-        });
-        VBox loginBox = new VBox(10, new Label("Username:"), usernameField, new Label("Password:"), passwordField, loginButton);
-        loginBox.setPadding(new Insets(10));
 
         // VBox for list of users
         VBox leftBox = new VBox(userList);
@@ -71,8 +55,8 @@ public class communicationPage extends Application {
         searchButton.setOnAction(event -> {
             String patientId = searchField.getText().trim();
             if (!patientId.isEmpty()) {
-                String patientAccountPath = "src/accounts/" + patientId;
-                String patientChatPath = "src/accounts/" + enteredUsername + "/chat/" +
+                String patientAccountPath = "accounts/" + patientId;
+                String patientChatPath = "accounts/" + uid + "/chat/" +
                 patientId + ".txt";
                 if (Files.exists(Paths.get(patientAccountPath))) {
                     // Patient exists
@@ -80,9 +64,9 @@ public class communicationPage extends Application {
                         // Chat file does not exist, create a new one
                         try {
                             Files.createFile(Paths.get(patientChatPath));
-                            Files.createFile(Paths.get("src/accounts/" + patientId + "/chat/"
-                            		+ enteredUsername + ".txt"));
-                            loadUserIds();
+                            Files.createFile(Paths.get("accounts/" + patientId + "/chat/"
+                            		+ uid + ".txt"));
+                            loadUserIds(this.uid);
                             System.out.println("Chat file created for patient: " + patientId);
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -137,21 +121,21 @@ public class communicationPage extends Application {
            
         });
    
-        primaryStage.setScene(new Scene(new VBox(loginBox, searchBox, root), 600, 400));
+        primaryStage.setScene(new Scene(new VBox(searchBox, root), 600, 400));
         primaryStage.setTitle("Chat Application");
         primaryStage.show();
         
-        loadUserIds();
+        loadUserIds(this.uid);
     }
     
-    private void loadUserIds() {
+    private void loadUserIds(String uid) {
         if (userList == null) {
             userList = new ListView<>(); // Initialize user list if not already initialized
             root.getChildren().add(userList); // Add user list to the root layout
         } else {
             userList.getItems().clear(); // Clear existing items from the user list
         }
-        File accountsDir = new File("src/accounts/" + enteredUsername + "/chat");
+        File accountsDir = new File("accounts/" + uid + "/chat");
         if (accountsDir.exists() && accountsDir.isDirectory()) {
         	System.out.println("Hello");
             File[] accountFiles = accountsDir.listFiles((dir, name) -> name.endsWith(".txt"));
@@ -166,7 +150,7 @@ public class communicationPage extends Application {
     }
    
     private void loadMessagesForUser(String userId) {
-        String userFilePath = "src/accounts/" + enteredUsername + "/chat/" + userId + ".txt";
+        String userFilePath = "accounts/" + uid + "/chat/" + userId + ".txt";
         try (BufferedReader br = new BufferedReader(new FileReader(userFilePath))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -179,7 +163,7 @@ public class communicationPage extends Application {
                     	System.out.println(a);
                     }
 
-                    if (lists[1].equals(enteredUsername)) {
+                    if (lists[1].equals(uid)) {
                         Label label = new Label(lists[0]);
                         label.setWrapText(true);
                         label.setStyle("-fx-background-color: #007aff; -fx-text-fill: white");
@@ -206,9 +190,9 @@ public class communicationPage extends Application {
     }
     
     private void sendMessage(String userId, String message) {
-        String userFilePath = "src/accounts/" + enteredUsername + "/chat/" + userId + ".txt";
+        String userFilePath = "accounts/" + uid + "/chat/" + userId + ".txt";
         String message2 = message;
-        message = message.concat("@$%@%%$#@#$%" + enteredUsername);
+        message = message.concat("@$%@%%$#@#$%" + uid);
         try (FileWriter writer = new FileWriter(userFilePath, true)) {
             writer.write(message + "\n");
             // Add the message to the chat interface
@@ -220,7 +204,7 @@ public class communicationPage extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String senderFilePath = "src/accounts/" + userId + "/chat/" + enteredUsername + ".txt";
+        String senderFilePath = "accounts/" + userId + "/chat/" + uid + ".txt";
         try (FileWriter writer = new FileWriter(senderFilePath, true)) {
         	writer.write(message + "\n");
         } catch (IOException e) {
@@ -229,15 +213,14 @@ public class communicationPage extends Application {
         
     }
     
-    private boolean login(String username, String password) {
-        String userAccountPath = "src/accounts/" + username;
+    public boolean login(String username, String password) {
+        String userAccountPath = "accounts/" + username;
         if (Files.exists(Paths.get(userAccountPath))) {
             // User exists, try to read password from the user's account directory
-            String passwordFilePath = userAccountPath + "/patientInfo.txt";
+            String passwordFilePath = userAccountPath + "/patientPass.txt";
             try (BufferedReader br = new BufferedReader(new FileReader(passwordFilePath))) {
                 String storedPassword = br.readLine();
-                String fixedPassword = storedPassword.substring(10, storedPassword.length() -1 );
-                System.out.println(fixedPassword);
+                String fixedPassword = storedPassword.substring(10, storedPassword.length());
                 return storedPassword != null && fixedPassword.equals(password);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -247,10 +230,6 @@ public class communicationPage extends Application {
     }
 
 
-
-    public static void main(String[] args) {
-        launch(args);
-    }
 
 
 }
