@@ -1,7 +1,9 @@
-package NurseDocPortal;
+package application;
 	
 
 import javafx.application.Application;
+import java.util.HashMap;
+import java.util.Map;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -28,51 +30,19 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
 
-//public void File Reader() {
-//    public void start(Stage primaryStage) {
-//        VBox root = new VBox(10);
-//        root.setPadding(new Insets(20));
-//
-//        Button browseButton = new Button("Browse Patient Directory");
-//
-//        VBox fileListContainer = new VBox(5);
-//
-//        browseButton.setOnAction(e -> {
-//            String pathToPatientFolder = "C:\\Users\\aksha\\OneDrive\\Documents\\Java Programs\\NursePortal\\" + PATIENT_FOLDER_NAME; // Modify this with the actual path
-//            File patientFolder = new File(pathToPatientFolder);
-//            fileListContainer.getChildren().clear();
-//            if (patientFolder.exists() && patientFolder.isDirectory()) {
-//                File[] visitFiles = patientFolder.listFiles();
-//                if (visitFiles != null) {
-//                    for (File visitFile : visitFiles) {
-//                        if (visitFile.isFile() && visitFile.getName().endsWith(".txt")) {
-//                        	Button fileButton = new Button(visitFile.getName());
-//                            fileListContainer.getChildren().add(fileButton);
-//                        }
-//                    }
-//                }
-//            } else {
-//                fileListContainer.getChildren().add(new Label("Patient folder not found"));
-//            }
-//        });
-//
-//        root.getChildren().addAll(browseButton, fileListContainer);
-//
-//        Scene scene = new Scene(root, 400, 200);
-//        primaryStage.setScene(scene);
-//        primaryStage.setTitle("Doctor's Office App");
-//        primaryStage.show();
-//    }
-//}
-public class NurseDocPortal extends Application {
+
+
+public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		
 		//V1
 //		Label l1 = new Label("Eat:");
 		Button n1 = new Button("Search Patient");
-		Button n2 = new Button("CT Scan Tech View");
 		Button n3 = new Button("Doctors View");
 		
 		 // Set preferred width and height for all buttons
@@ -80,8 +50,6 @@ public class NurseDocPortal extends Application {
         double preferredHeight = 50;
         n1.setPrefWidth(preferredWidth);
         n1.setPrefHeight(preferredHeight);
-        n2.setPrefWidth(preferredWidth);
-        n2.setPrefHeight(preferredHeight);
         n3.setPrefWidth(preferredWidth);
         n3.setPrefHeight(preferredHeight);
 
@@ -90,7 +58,7 @@ public class NurseDocPortal extends Application {
 		VBox v1 = new VBox();
 		v1.setPadding(new Insets(60,0,0,0));
 		v1.setSpacing(50);
-		v1.getChildren().addAll(n1, n2, n3);
+		v1.getChildren().addAll(n1, n3);
 		
 		HBox h = new HBox();
 		 h.setPadding(new Insets(10));
@@ -130,22 +98,12 @@ public class NurseDocPortal extends Application {
         	DP.start(new Stage());
         });
 
-        // Event handling for Button 2
-        n2.setOnAction(e -> {
-            // Navigate to Class2 when Button 2 is clicked
-            CT ct = new CT();
-            ct.start(new Stage());
-        });
 
         // Event handling for Button 3
         n3.setOnAction(e -> {
-            // Navigate to Class3 when Button 3 is clicked
-//            PatientID pid = new PatientID();
-//            pid.start(new Stage());
-            HealthHistoryDoctor hhd = new HealthHistoryDoctor("C:\\Users\\aksha\\OneDrive\\Documents\\Java Programs\\NursePortal\\TomHank_1-11-2004\\3-25-2024");
-        	hhd.start(new Stage());
-//        	HealthInformationForm hif = new HealthInformationForm();
-//        	hif.start(new Stage());
+
+//        	 HealthHistoryDoctor hhd = new  HealthHistoryDoctor();
+//             hhd.start(new Stage());
         
         });
 	}
@@ -174,7 +132,7 @@ class PatientSearch extends Application {
         Label resultLabel = new Label();
 
         browseButton.setOnAction(e -> {
-        	String patientFolderName = nameField.getText() + "_" + birthdayField.getText();
+        	String patientFolderName = "P" + nameField.getText() + "_" + birthdayField.getText();
         	PatientFolderOpen pfo = new PatientFolderOpen(patientFolderName);
         	pfo.start(new Stage());
         	
@@ -213,11 +171,11 @@ class PatientFolderOpen extends Application {
         VBox fileListContainer = new VBox(5);
         
         newVisitButton.setOnAction(e -> {
-        	 String pathToPatientFolder = "C:\\Users\\aksha\\OneDrive\\Documents\\Java Programs\\NursePortal\\" + PATIENT_FOLDER_NAME; 
-            newVisit.createFolder();
+        	 String pathToPatientFolder = "accounts/" + PATIENT_FOLDER_NAME + File.separator + "visits/"; 
+            newVisit.createFolder(pathToPatientFolder);
         });
         browseButton.setOnAction(e -> {
-            String pathToPatientFolder = "C:\\Users\\aksha\\OneDrive\\Documents\\Java Programs\\NursePortal\\" + PATIENT_FOLDER_NAME; // Modify this with the actual path
+            String pathToPatientFolder = "accounts/" + PATIENT_FOLDER_NAME + File.separator + "visits/"; // Modify this with the actual path
             File patientFolder = new File(pathToPatientFolder);
             folderListContainer.getChildren().clear();
             fileListContainer.getChildren().clear();
@@ -256,10 +214,8 @@ class PatientFolderOpen extends Application {
 
 class newVisit{
 
-    public static void createFolder(){
-        // Specify the directory path where you want to create the patient folder
-        String directoryPath = "C:\\Users\\aksha\\OneDrive\\Documents\\Java Programs\\NursePortal\\TomHank_01-11-2004";
-
+    public static void createFolder(String folderPath){
+    	String directoryPath = folderPath;
         // Get current date in MM-DD-YYYY format
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
         String currentDate = dateFormat.format(new Date());
@@ -270,13 +226,13 @@ class newVisit{
         File folder = new File(directory, folderName);
         if (!folder.exists()) {
             if (folder.mkdir()) {
-                System.out.println("Folder created: " + folder.getAbsolutePath());
+                System.out.println("Folder created: ");
             } else {
                 System.err.println("Failed to create folder!");
                 return;
             }
         } else {
-            System.err.println("Folder already exists: " + folder.getAbsolutePath());
+            System.err.println("Folder already exists: ");
             return;
         }
 
@@ -287,21 +243,23 @@ class newVisit{
             File file = new File(folder, fileName);
             try {
                 if (file.createNewFile()) {
-                    System.out.println("File created: " + file.getAbsolutePath());
+                    System.out.println("File created: ");
                 } else {
-                    System.err.println("File already exists: " + file.getAbsolutePath());
+                    System.err.println("File already exists: ");
                 }
             } catch (IOException e) {
-                System.err.println("Failed to create file: " + file.getAbsolutePath());
+                System.err.println("Failed to create file: ");
             }
         }
     }
 }
 
 class fileOpen extends Application{
-	File folder;
+	public File folder;
+	public String folderStr = folder.toString();
 	public fileOpen(File folder) {
 		this.folder = folder;
+		
 	}
 	
 	
@@ -315,10 +273,10 @@ class fileOpen extends Application{
 	                fileButton.setOnAction(event -> {
                         // Perform actions when folder button is clicked
                         if(file.getName().equals("vitals.txt")) {
-                        	readVitals rv = new readVitals(folder.getAbsolutePath());
+                        	readVitals rv = new readVitals(folderStr);
                         	rv.start(new Stage());
                         }else {
-                        	HealthHistoryDoctor hhn = new HealthHistoryDoctor(folder.getAbsolutePath());
+                        	HealthHistoryNurse hhn = new HealthHistoryNurse(folderStr);
                         	hhn.start(new Stage());
                         }
                     });
@@ -349,14 +307,8 @@ class readVitals extends Application{
 	     String BloodPressure = "";
 	     
 	     public readVitals(String folderPath) {
-	    	 	folderPath = folderPath + "\\vitals.txt";
 		        this.folderPath = folderPath;
 		}
-	     
-//	     public String getName() {
-//	    	 String[] parts = folderPath.split("_");
-//	         return parts[0];
-//	     }
 		
 	    public void start(Stage primaryStage) {
 
@@ -371,40 +323,30 @@ class readVitals extends Application{
 	         } catch (IOException e) {
 	             e.printStackTrace();
 	         }
-	    	 
-	    	 
-
-
-//	        // Labels and TextFields for HBox h2
-//	        Label l2 = new Label("The total Agatston CAC score:");
-//	        TextField t2 = new TextField(totalAgatstonCACScore);
-//	        t2.setEditable(false);
-//
-//	        HBox h2 = new HBox(50, l2, t2);
 
 	        // HBoxes for labels l4 to l8
 	        TextField t3 = new TextField(Age);
-	        t3.setEditable(false);
+	        t3.setEditable(true);
 	        HBox h4 = new HBox(new Label("Age:"), t3);
 	        h4.setSpacing(10);
 	        
 	        TextField t4 = new TextField(Height);
-	        t4.setEditable(false);
+	        t4.setEditable(true);
 	        HBox h5 = new HBox(new Label("Height:"), t4);
 	        h5.setSpacing(10);
 	        
 	        TextField t5 = new TextField(Weight);
-	        t5.setEditable(false);
+	        t5.setEditable(true);
 	        HBox h6 = new HBox(new Label("Weight:"), t5);
 	        h6.setSpacing(10);
 	        
 	        TextField t6 = new TextField(BodyTemperature);
-	        t6.setEditable(false);
+	        t6.setEditable(true);
 	        HBox h7 = new HBox(new Label("Body Temperature:"), t6);
 	        h7.setSpacing(10);
 	        
 	        TextField t7 = new TextField(BloodPressure);
-	        t7.setEditable(false);
+	        t7.setEditable(true);
 	        HBox h8 = new HBox(new Label("Blood Pressure:"), t7);
 	        h8.setSpacing(10);
 
@@ -436,107 +378,84 @@ class readVitals extends Application{
 }
 
 class HealthHistoryNurse extends Application {
-	
-	String folderPath = ""; 
+	String[] FILE_PATHS;
+	String folderPath; 
 
 	public HealthHistoryNurse(String folderPath) {
-        this.folderPath = folderPath;
-        initializeFilePaths(); 
-    }
-
-    
-    private void initializeFilePaths() {
-        FILE_PATHS = new String[]{
-                folderPath + "\\previousHealthIssues.txt",
-                folderPath + "\\healthConcerns.txt",
-                folderPath + "\\recommendations.txt",
-                folderPath + "\\knownAllergies.txt",
-                folderPath + "\\previousMedication.txt",
-                folderPath + "\\immunizationRecords.txt"
+		System.out.println("Constructor called");
+		FILE_PATHS = new String[]{
+                folderPath + "/previousHealthIssues.txt",
+                folderPath + "/healthConcerns.txt",
+                folderPath + "/recommendations.txt",
+                folderPath + "/knownAllergies.txt",
+                folderPath + "/previousMedication.txt",
+                folderPath + "/immunizationRecords.txt"
         };
     }
 
-    
-    private String[] FILE_PATHS;
-    
+
+    private TextArea[] textAreas = new TextArea[6];
 
     @Override
     public void start(Stage primaryStage) {
-    	System.out.println(FILE_PATHS[0]);
-        VBox vbox1 = new VBox(10);
-        VBox vbox2 = new VBox(10);
-        VBox vbox3 = new VBox(10);
-        VBox vbox4 = new VBox(10);
-        VBox vbox5 = new VBox(10);
-        VBox vbox6 = new VBox(10);
+        GridPane gridPane = new GridPane();
 
-        String[] labels = {"Previous Health Issues", "Health Concerns", "Recommendations", "Known Allergies", "Previous Medication", "Immunization Records"};
-
-        for (int i = 0; i < labels.length; i++) {
-            Label label = new Label(labels[i]);
+        for (int i = 0; i < FILE_PATHS.length; i++) {
+            Label label = new Label(setLabel(i));
             TextArea textArea = new TextArea();
-            textArea.setPrefRowCount(19);
-            textArea.setPrefColumnCount(40);
-            textArea.setWrapText(true);
-
-            VBox vbox;
-            if (i < 2) {
-                vbox = vbox1;
-            } else if (i < 4) {
-                vbox = vbox2;
-            } else if (i < 6) {
-                vbox = vbox3;
-            } else if (i < 8) {
-                vbox = vbox4;
-            } else if (i < 10) {
-                vbox = vbox5;
-            } else {
-                vbox = vbox6;
+            if(i == 2) {
+            	textArea.setEditable(false);
             }
-
-            vbox.getChildren().addAll(label, textArea);
-
-            try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATHS[i]))) {
-                StringBuilder content = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    content.append(line).append("\n");
-                }
-                textArea.setText(content.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            textAreas[i] = textArea;
+            readFileIntoTextArea(textArea, FILE_PATHS[i]);
+            gridPane.add(label, i % 3, 2 * (i / 3));
+            gridPane.add(textArea, i % 3, 2 * (i / 3) + 1);
         }
 
-        HBox hbox1 = new HBox(10, vbox1, vbox2, vbox3);
-        hbox1.setPadding(new Insets(10));
-        HBox hbox2 = new HBox(10, vbox4, vbox5, vbox6);
-        hbox2.setPadding(new Insets(10));
-
         Button submitButton = new Button("Submit");
-        submitButton.setOnAction(e -> {
+        submitButton.setOnAction(event -> {
             for (int i = 0; i < FILE_PATHS.length; i++) {
-                VBox vbox = i < 3 ? vbox1 : i < 6 ? vbox2 : i < 9 ? vbox3 : i < 12 ? vbox4 : i < 15 ? vbox5 : vbox6;
-                TextArea textArea = (TextArea) vbox.getChildren().get(1);
-                writeToTextFile(FILE_PATHS[i], textArea.getText());
+                writeToTextFile(FILE_PATHS[i], textAreas[i]);
             }
         });
 
-        BorderPane root = new BorderPane();
-        root.setTop(hbox1);
-        root.setCenter(hbox2);
-        root.setBottom(submitButton);
-       BorderPane.setMargin(submitButton, new Insets(20, 200, 20 ,200));
+        gridPane.add(submitButton, 0, 4, 3, 1);
 
-        Scene scene = new Scene(root, 1300, 900);
+        Scene scene = new Scene(gridPane, 800, 600);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Health History Form");
         primaryStage.show();
     }
+    
+    public String setLabel(int i) {
+    	if(i == 0) {
+    		return "Previous Health Issues";
+    	}else if(i == 1) {
+    		return "Health Concerns";
+    	}else if(i == 2) {
+    		return "Reccomendations";
+    	}else if(i == 3) {
+    		return "Known Allergies";
+    	}else if(i == 4) {
+    		return "Previous Medication";
+    	}else if(i == 5) {
+    		return "Immunization Records";
+    	}
+    	return "----";
+    }
+    
+    private void readFileIntoTextArea(TextArea textArea, String filePath) {
+        try {
+            String content = new String(Files.readAllBytes(Paths.get(filePath)));
+            textArea.setText(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-    private void writeToTextFile(String filePath, String content) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            writer.write(content);
+    private void writeToTextFile(String filePath, TextArea textArea) {
+        try {
+            String content = textArea.getText();
+            Files.write(Paths.get(filePath), content.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -545,7 +464,6 @@ class HealthHistoryNurse extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
 }
 
 class HealthHistoryDoctor extends Application {
@@ -560,12 +478,12 @@ class HealthHistoryDoctor extends Application {
     // Method to initialize FILE_PATHS
     private void initializeFilePaths() {
         FILE_PATHS = new String[]{
-                folderPath + "\\previousHealthIssues.txt",
-                folderPath + "\\healthConcerns.txt",
-                folderPath + "\\recommendations.txt",
-                folderPath + "\\knownAllergies.txt",
-                folderPath + "\\previousMedication.txt",
-                folderPath + "\\immunizationRecords.txt"
+                folderPath + "/previousHealthIssues.txt",
+                folderPath + "/healthConcerns.txt",
+                folderPath + "/recommendations.txt",
+                folderPath + "/knownAllergies.txt",
+                folderPath + "/previousMedication.txt",
+                folderPath + "/immunizationRecords.txt"
         };
     }
 
@@ -573,497 +491,71 @@ class HealthHistoryDoctor extends Application {
     private String[] FILE_PATHS;
     
 
+
+    private TextArea[] textAreas = new TextArea[FILE_PATHS.length];
+
     @Override
     public void start(Stage primaryStage) {
-    	System.out.println(FILE_PATHS[0]);
-        VBox vbox1 = new VBox(10);
-        VBox vbox2 = new VBox(10);
-        VBox vbox3 = new VBox(10);
-        VBox vbox4 = new VBox(10);
-        VBox vbox5 = new VBox(10);
-        VBox vbox6 = new VBox(10);
+        GridPane gridPane = new GridPane();
 
-        String[] labels = {"Previous Health Issues", "Health Concerns", "Recommendations", "Known Allergies", "Previous Medication", "Immunization Records"};
-
-        for (int i = 0; i < labels.length; i++) {
-            Label label = new Label(labels[i]);
+        for (int i = 0; i < FILE_PATHS.length; i++) {
+            Label label = new Label(setLabel(i));
             TextArea textArea = new TextArea();
-            textArea.setPrefRowCount(19);
-            textArea.setPrefColumnCount(40);
-            textArea.setWrapText(true);
-
-            VBox vbox;
-            if (i < 2) {
-                vbox = vbox1;
-            } else if (i < 4) {
-                vbox = vbox2;
-            } else if (i < 6) {
-                vbox = vbox3;
-            } else if (i < 8) {
-                vbox = vbox4;
-            } else if (i < 10) {
-                vbox = vbox5;
-            } else {
-                vbox = vbox6;
-            }
-
-            vbox.getChildren().addAll(label, textArea);
-
-            try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATHS[i]))) {
-                StringBuilder content = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    content.append(line).append("\n");
-                }
-                textArea.setText(content.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            textAreas[i] = textArea;
+            readFileIntoTextArea(textArea, FILE_PATHS[i]);
+            gridPane.add(label, i % 3, 2 * (i / 3));
+            gridPane.add(textArea, i % 3, 2 * (i / 3) + 1);
         }
 
-        HBox hbox1 = new HBox(10, vbox1, vbox2, vbox3);
-        hbox1.setPadding(new Insets(10));
-        HBox hbox2 = new HBox(10, vbox4, vbox5, vbox6);
-        hbox2.setPadding(new Insets(10));
-
         Button submitButton = new Button("Submit");
-        submitButton.setOnAction(e -> {
+        submitButton.setOnAction(event -> {
             for (int i = 0; i < FILE_PATHS.length; i++) {
-                VBox vbox = i < 3 ? vbox1 : i < 6 ? vbox2 : i < 9 ? vbox3 : i < 12 ? vbox4 : i < 15 ? vbox5 : vbox6;
-                TextArea textArea = (TextArea) vbox.getChildren().get(1);
-                writeToTextFile(FILE_PATHS[i], textArea.getText());
+                writeToTextFile(FILE_PATHS[i], textAreas[i]);
             }
         });
-        submitButton.setPrefSize(300, 40); 
 
-        BorderPane root = new BorderPane();
-        root.setTop(hbox1);
-        root.setCenter(hbox2);
-        root.setBottom(submitButton);
-        BorderPane.setMargin(submitButton, new Insets(10, 10, 40, 500));
+        gridPane.add(submitButton, 0, 4, 3, 1);
 
-        Scene scene = new Scene(root, 1300, 900);
+        Scene scene = new Scene(gridPane, 800, 600);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Health History Form");
         primaryStage.show();
     }
-
-    private void writeToTextFile(String filePath, String content) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            writer.write(content);
+    
+    public String setLabel(int i) {
+    	if(i == 0) {
+    		return "Previous Health Issues";
+    	}else if(i == 1) {
+    		return "Health Concerns";
+    	}else if(i == 2) {
+    		return "Reccomendations";
+    	}else if(i == 3) {
+    		return "Known Allergies";
+    	}else if(i == 4) {
+    		return "Previous Medication";
+    	}else if(i == 5) {
+    		return "Immunization Records";
+    	}
+    	return "NULL";
+    }
+    
+    private void readFileIntoTextArea(TextArea textArea, String filePath) {
+        try {
+            String content = new String(Files.readAllBytes(Paths.get(filePath)));
+            textArea.setText(content);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-}
-
-class  PatientIntake extends Application{
-	public void start(Stage primaryStage) {
-		
-		//V1
-		Label l1 = new Label("First Name:");
-		Label l2 = new Label("Last Name:");
-		Label l3 = new Label("Email:");
-		Label l4 = new Label("Phone Number:");
-		Label l5 = new Label("Health History:");
-		Label l6 = new Label("Insurance ID:");
-		
-		//Layout
-		VBox v1 = new VBox();
-		v1.setPadding(new Insets(0,0,0,0));
-		v1.setSpacing(50);
-		v1.getChildren().addAll(l1, l2, l3, l4, l5, l6);
-
-		//V2
-		TextField t1 = new TextField();
-		TextField t2 = new TextField();
-		TextField t3 = new TextField();
-		TextField t4 = new TextField();
-		TextField t5 = new TextField();
-		TextField t6 = new TextField();
-		Button sb = new Button("Submit");
-		
-		//Layout
-		VBox v2 = new VBox();
-		v2.setPadding(new Insets(0,0,0,0));
-		v2.setSpacing(42);
-		v2.getChildren().addAll(t1, t2, t3, t4, t5, t6, sb);
-		
-		HBox h = new HBox();
-		h.setPadding(new Insets(10));
-//		h.setPadding(new Insets(0, 0, 0, 0));
-		h.setSpacing(20);
-		h.getChildren().addAll(v1, v2);
-		h.setAlignment(Pos.CENTER);
-		
-		
-		//TL
-		Label TL = new Label("Patient Intake Form");
-		TL.setStyle("-fx-font-size: 12px;");
-		TL.setPadding(new Insets(0, 0, 0, 150));
-		 StackPane.setAlignment(TL, Pos.CENTER);
-		
-		//Dynamic Size
-		VBox.setVgrow(v1, Priority.ALWAYS);
-		
-        // Set up BorderPane
-        BorderPane bp = new BorderPane();
-        bp.setTop(TL);
-        bp.setCenter(h);
-        
-        //Scene
-		Scene scene = new Scene(bp, 400, 480);
-		primaryStage.setScene(scene);
-		primaryStage.setTitle("Patient Intake Form");
-		primaryStage.show();	
-		
-		sb.setOnAction(e -> {
-            String firstName = t1.getText();
-            String lastName = t2.getText();
-            String email = t3.getText();
-            String phoneNumber = t4.getText();
-            String healthHistory = t5.getText();
-            String insuranceID = t6.getText();
-
-            // Generate unique patient ID
-            String patientID = String.valueOf((int) (Math.random() * 90000) + 10000);
-
-            // Create patient information string
-            String patientInfo = "Patient ID: " + patientID + "\n" +
-                    "First Name: " + firstName + "\n" +
-                    "Last Name: " + lastName + "\n" +
-                    "Email: " + email + "\n" +
-                    "Phone Number: " + phoneNumber + "\n" +
-                    "Health History: " + healthHistory + "\n" +
-                    "Insurance ID: " + insuranceID;
-
-            // Write patient information to file
-            try {
-                FileWriter writer = new FileWriter(patientID + "_PatientInfo.txt");
-                writer.write(patientInfo);
-                writer.close();
-                System.out.println("Patient information saved successfully.");
-                System.out.println("Patient ID: " + patientID);
-            } catch (IOException ex) {
-                System.out.println("An error occurred while saving patient information.");
-                ex.printStackTrace();
-            }
-        });
-
-		
-	}
-	
-	public static void main(String[] args) {
-        launch(args);
-   }
-
-
-}
-
-class CT extends Application {
-    @Override
-    public void start(Stage primaryStage) {
-        // Labels and TextFields for HBox h1
-        Label l1 = new Label("Patient ID:");
-        TextField t1 = new TextField();
-        	
-        HBox h1 = new HBox(150, l1, t1);
-
-        // Labels and TextFields for HBox h2
-        Label l2 = new Label("The total Agatston CAC score:");
-        TextField t2 = new TextField();
-
-        HBox h2 = new HBox(50, l2, t2);
-
-        // Labels for HBox h3
-        Label l3 = new Label("Vessel level Agatson CAC score");
-        HBox h3 = new HBox(l3);
-        h3.setSpacing(50);
-
-        // HBoxes for labels l4 to l8
-        TextField t3 = new TextField();
-        HBox h4 = new HBox(new Label("LM:"), t3);
-        h4.setSpacing(10);
-        
-        TextField t4 = new TextField();
-        HBox h5 = new HBox(new Label("LAD:"), t4);
-        h5.setSpacing(10);
-        
-        TextField t5 = new TextField();
-        HBox h6 = new HBox(new Label("LCX:"), t5);
-        h6.setSpacing(10);
-        
-        TextField t6 = new TextField();
-        HBox h7 = new HBox(new Label("RCA:"), t6);
-        h7.setSpacing(10);
-        
-        TextField t7 = new TextField();
-        HBox h8 = new HBox(new Label("PDA:"), t7);
-        h8.setSpacing(10);
-        
-        Button submitButton = new Button("Submit");
-        
-
-        // VBox to stack HBoxes vertically
-        VBox v = new VBox(20, h1, h2, h3, h4, h5, h6, h7, h8, submitButton);
-        v.setAlignment(Pos.CENTER);
-        v.setPadding(new Insets(10));
-
-        // Title label
-        Label TL = new Label("CT Scan Technician View");
-        TL.setStyle("-fx-font-size: 12px;");
-        TL.setPadding(new Insets(0, 0, 0, 150));
-
-        // Set up BorderPane
-        BorderPane bp = new BorderPane();
-        bp.setTop(TL);
-        bp.setCenter(v);
-
-        // Set up the scene
-        Scene scene = new Scene(bp, 400, 400);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("CT Scan Technician View");
-        primaryStage.show();
-        
-        submitButton.setOnAction(e -> {
-            String patientID = t1.getText();
-            String totalAgatstonCACScore = t2.getText();
-            String lm = t3.getText();
-            String lad = t4.getText();
-            String lcx = t5.getText();
-            String rca = t6.getText();
-            String pda = t7.getText();
-            
-            // Check if any field is empty
-            if (patientID.isEmpty() || totalAgatstonCACScore.isEmpty() || lm.isEmpty() || lad.isEmpty() || lcx.isEmpty() || rca.isEmpty() || pda.isEmpty()) {
-                System.out.println("Alert: Please fill in all fields.");
-                return;
-            }
-            
-            // Save CT scan data to file
-            saveCTScanData(patientID, totalAgatstonCACScore, lm, lad, lcx, rca, pda);
-        });
-    }
-    
-    private void saveCTScanData(String patientID, String totalAgatstonCACScore, String lm, String lad, String lcx, String rca, String pda) {
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(patientID + "CTResults.txt"))) {
-			writer.write("" + patientID + "\n");
-			writer.write("" + totalAgatstonCACScore + "\n");
-			writer.write("" + lm + "\n");
-			writer.write("" + lad + "\n");
-			writer.write("" + lcx + "\n");
-			writer.write("" + rca + "\n");
-			writer.write("" + pda + "\n");
-			System.out.println("CT scan data saved successfully.");
-		} catch (IOException e) {
-			System.out.println("An error occurred while saving CT scan data.");
-			e.printStackTrace();
-		}
-	}
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-}
-
-//Example Class3
-
-
-class PatientID extends Application {
-    @Override
-    public void start(Stage primaryStage) {
-        // Label and TextField for patient ID input
-        Label idLabel = new Label("Enter Patient ID:");
-        TextField idField = new TextField();
-
-        // Submit button
-        Button submitButton = new Button("Submit");
-
-        // Layout
-        VBox v = new VBox(20, idLabel, idField, submitButton);
-        v.setPrefWidth(300);
-        v.setPrefHeight(200);
-        v.setStyle("-fx-padding: 10px;");
-
-        // Title label
-        Label title = new Label("Patient View");
-
-        // Set up BorderPane
-        BorderPane bp = new BorderPane();
-        bp.setTop(title);
-        bp.setCenter(v);
-
-        // Set up the scene
-        Scene scene = new Scene(bp, 400, 300);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Patient View");
-        primaryStage.show();
-        
-        
-
-        // Event handling for Submit button
-        submitButton.setOnAction(e -> {
-            String patientID = idField.getText();
-            if (!patientID.isEmpty()) {
-            	 PatientView pv = new PatientView(patientID);
-                 pv.start(new Stage());
-            }
-        });
-    }
-
-    // Method to retrieve patient data from file and display
-    private void displayPatientData(String patientID) {
-        String filename = patientID + "CTResults.txt";
-       
-        int totalAgatstonCACScore = 0;
-        int lm = 0;
-        int lad = 0;
-        int lcx = 0;
-        int rca = 0;
-        int pda = 0;
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            // Read each line from the file
-            totalAgatstonCACScore = Integer.parseInt(reader.readLine());
-            lm = Integer.parseInt(reader.readLine());
-            lad = Integer.parseInt(reader.readLine());
-            lcx = Integer.parseInt(reader.readLine());
-            rca = Integer.parseInt(reader.readLine());
-            pda = Integer.parseInt(reader.readLine());
+    private void writeToTextFile(String filePath, TextArea textArea) {
+        try {
+            String content = textArea.getText();
+            Files.write(Paths.get(filePath), content.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
-        System.out.println("totalAgatstonCACScore: " + totalAgatstonCACScore);
-        System.out.println("lm: " + lm);
-        System.out.println("lad: " + lad);
-        System.out.println("lcx: " + lcx);
-        System.out.println("rca: " + rca);
-        System.out.println("pda: " + pda);
-        
     }
 
-    // Method to display patient information
-    private void showPatientInfo(int totalAgatstonCACScore, int lm, int lad, int lcx, int rca, int pda) {
-        // Implement logic to display patient information in your application
-        System.out.println("Total Agatston CAC score: " + totalAgatstonCACScore);
-        System.out.println("LM: " + lm);
-        System.out.println("LAD: " + lad);
-        System.out.println("LCX: " + lcx);
-        System.out.println("RCA: " + rca);
-        System.out.println("PDA: " + pda);
-    }
-
-    // Method to show alert message
-    private void showAlert(String message) {
-        // Implement alert message display here
-        System.out.println("Alert: " + message);
-    }
-    
-   
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-}
-
-class PatientView extends Application{
-	
-	private String patientID;
-	 String filename = patientID + "CTResults.txt";
-     
-     String totalAgatstonCACScore = "";
-     String lm = "";
-     String lad = "";
-     String lcx = "";
-     String rca = "";
-     String pda = "";
-     String name = "";
-	 
-	public PatientView(String patientID) {
-	        this.patientID = patientID;
-	}
-	
-	
-    public void start(Stage primaryStage) {
-
-    	 try (BufferedReader reader = new BufferedReader(new FileReader(patientID + "CTResults.txt"))) {
-             // Read each line from the file
-             totalAgatstonCACScore = reader.readLine();
-             lm = reader.readLine();
-             lad = reader.readLine();
-             lcx = reader.readLine();
-             rca = reader.readLine();
-             pda = reader.readLine();
-         } catch (IOException e) {
-             e.printStackTrace();
-         }
-    	 
-    	 try (BufferedReader reader = new BufferedReader(new FileReader(patientID + "_PatientInfo.txt"))) {
-             // Read each line from the file
-             reader.readLine();
-             name = reader.readLine();
-         } catch (IOException e) {
-             e.printStackTrace();
-         }
-    	 
-        // Labels and TextFields for HBox h2
-        Label l2 = new Label("The total Agatston CAC score:");
-        TextField t2 = new TextField(totalAgatstonCACScore);
-        t2.setEditable(false);
-
-        HBox h2 = new HBox(50, l2, t2);
-
-        // HBoxes for labels l4 to l8
-        TextField t3 = new TextField(lm);
-        t3.setEditable(false);
-        HBox h4 = new HBox(new Label("LM:"), t3);
-        h4.setSpacing(10);
-        
-        TextField t4 = new TextField(lad);
-        t4.setEditable(false);
-        HBox h5 = new HBox(new Label("LAD:"), t4);
-        h5.setSpacing(10);
-        
-        TextField t5 = new TextField(lcx);
-        t5.setEditable(false);
-        HBox h6 = new HBox(new Label("LCX:"), t5);
-        h6.setSpacing(10);
-        
-        TextField t6 = new TextField(rca);
-        t6.setEditable(false);
-        HBox h7 = new HBox(new Label("RCA:"), t6);
-        h7.setSpacing(10);
-        
-        TextField t7 = new TextField(pda);
-        t7.setEditable(false);
-        HBox h8 = new HBox(new Label("PDA:"), t7);
-        h8.setSpacing(10);
-
-        // VBox to stack HBoxes vertically
-        VBox v = new VBox(20, h2, h4, h5, h6, h7, h8);
-        v.setAlignment(Pos.CENTER);
-        v.setPadding(new Insets(10));
-
-        // Title label
-        Label TL = new Label("Hello Patient " + name.substring(12));
-        TL.setStyle("-fx-font-size: 12px;");
-        TL.setPadding(new Insets(0, 0, 0, 150));
-
-        // Set up BorderPane
-        BorderPane bp = new BorderPane();
-        bp.setTop(TL);
-        bp.setCenter(v);
-
-        // Set up the scene
-        Scene scene = new Scene(bp, 400, 400);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Patient View");
-        primaryStage.show();
-    }
     public static void main(String[] args) {
         launch(args);
     }
