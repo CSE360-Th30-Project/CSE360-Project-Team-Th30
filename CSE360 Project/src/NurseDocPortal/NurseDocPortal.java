@@ -66,6 +66,15 @@ import java.util.Date;
 //    }
 //}
 public class NurseDocPortal extends Application {
+	
+	public String uid;
+	
+	public NurseDocPortal(String userInput) {
+		// TODO Auto-generated constructor stub
+		this.uid = userInput;
+	}
+
+
 	@Override
 	public void start(Stage primaryStage) {
 		
@@ -103,7 +112,7 @@ public class NurseDocPortal extends Application {
 		Label TL = new Label("Welcome to Heart Health Imaging and Recording System");
 		TL.setStyle("-fx-font-size: 12px;");
 		TL.setPadding(new Insets(0, 0, 0, 40));
-		 StackPane.setAlignment(TL, Pos.CENTER);
+		StackPane.setAlignment(TL, Pos.CENTER);
 		
 		//Dynamic Size
 		VBox.setVgrow(v1, Priority.ALWAYS);
@@ -142,7 +151,7 @@ public class NurseDocPortal extends Application {
             // Navigate to Class3 when Button 3 is clicked
 //            PatientID pid = new PatientID();
 //            pid.start(new Stage());
-            HealthHistoryDoctor hhd = new HealthHistoryDoctor("C:\\Users\\aksha\\OneDrive\\Documents\\Java Programs\\NursePortal\\TomHank_1-11-2004\\3-25-2024");
+            HealthHistoryDoctor hhd = new HealthHistoryDoctor("accounts/" + uid);
         	hhd.start(new Stage());
 //        	HealthInformationForm hif = new HealthInformationForm();
 //        	hif.start(new Stage());
@@ -213,7 +222,7 @@ class PatientFolderOpen extends Application {
         VBox fileListContainer = new VBox(5);
         
         newVisitButton.setOnAction(e -> {
-        	 String pathToPatientFolder = "C:\\Users\\aksha\\OneDrive\\Documents\\Java Programs\\NursePortal\\" + PATIENT_FOLDER_NAME; 
+        	 String pathToPatientFolder = "accounts/" + PATIENT_FOLDER_NAME +"/"; 
             newVisit.createFolder();
         });
         browseButton.setOnAction(e -> {
@@ -256,18 +265,16 @@ class PatientFolderOpen extends Application {
 
 class newVisit{
 
-    public static void createFolder(){
+    public static void createFolder(String patientName){
         // Specify the directory path where you want to create the patient folder
-        String directoryPath = "C:\\Users\\aksha\\OneDrive\\Documents\\Java Programs\\NursePortal\\TomHank_01-11-2004";
+        String directoryPath = "accounts/" + patientName + "/visits/";
 
         // Get current date in MM-DD-YYYY format
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
         String currentDate = dateFormat.format(new Date());
 
         // Create folder with current date in the specified directory
-        String folderName = currentDate;
-        File directory = new File(directoryPath);
-        File folder = new File(directory, folderName);
+        File folder = new File(directoryPath + File.separator + currentDate + File.separator);
         if (!folder.exists()) {
             if (folder.mkdir()) {
                 System.out.println("Folder created: " + folder.getAbsolutePath());
@@ -1064,6 +1071,7 @@ class PatientView extends Application{
         primaryStage.setTitle("Patient View");
         primaryStage.show();
     }
+    
     public static void main(String[] args) {
         launch(args);
     }
