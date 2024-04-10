@@ -1,5 +1,5 @@
-package application;
-	
+package NurseDocPortal;
+
 //updated
 import javafx.application.Application;
 import java.util.HashMap;
@@ -36,7 +36,15 @@ import java.util.Arrays;
 
 
 
-public class Main extends Application {
+public class NurseDocPortal extends Application {
+	
+	public String uid;
+	
+	public NurseDocPortal(String uid) {
+		this.uid = uid;
+		
+	}
+	
 	@Override
 	public void start(Stage primaryStage) {
 		
@@ -108,9 +116,6 @@ public class Main extends Application {
         });
 	}
 	
-	public static void main(String[] args) {
-		launch(args);
-	}
 }
 
 
@@ -132,7 +137,8 @@ class PatientSearch extends Application {
         Label resultLabel = new Label();
 
         browseButton.setOnAction(e -> {
-        	String patientFolderName = "P" + nameField.getText() + "_" + birthdayField.getText();
+        	String patientFolderName = "P" + nameField.getText().trim() + "_" + birthdayField.getText().trim();
+        	System.out.println(patientFolderName);
         	PatientFolderOpen pfo = new PatientFolderOpen(patientFolderName);
         	pfo.start(new Stage());
         	
@@ -186,6 +192,7 @@ class PatientFolderOpen extends Application {
                         Button folderButton = new Button(subFolder.getName());
                         folderButton.setOnAction(event -> {
                             // Perform actions when folder button is clicked
+                        	System.out.println(subFolder.toString());
                             fileOpen fo = new fileOpen(subFolder);
                             fo.start(new Stage());
                         });
@@ -219,11 +226,13 @@ class newVisit{
         // Get current date in MM-DD-YYYY format
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
         String currentDate = dateFormat.format(new Date());
+        File visits = new File(directoryPath);
+        visits.mkdir();
+        
 
         // Create folder with current date in the specified directory
-        String folderName = currentDate;
-        File directory = new File(directoryPath);
-        File folder = new File(directory, folderName);
+        String folderName = directoryPath.toString() + currentDate + File.separator;
+        File folder = new File(folderName);
         if (!folder.exists()) {
             if (folder.mkdir()) {
                 System.out.println("Folder created: ");
@@ -256,7 +265,7 @@ class newVisit{
 
 class fileOpen extends Application{
 	public File folder;
-	public String folderStr = folder.toString();
+
 	public fileOpen(File folder) {
 		this.folder = folder;
 		
@@ -273,10 +282,10 @@ class fileOpen extends Application{
 	                fileButton.setOnAction(event -> {
                         // Perform actions when folder button is clicked
                         if(file.getName().equals("vitals.txt")) {
-                        	readVitals rv = new readVitals(folderStr);
+                        	readVitals rv = new readVitals(folder.toString());
                         	rv.start(new Stage());
                         }else {
-                        	HealthHistoryNurse hhn = new HealthHistoryNurse(folderStr);
+                        	HealthHistoryNurse hhn = new HealthHistoryNurse(folder.toString());
                         	hhn.start(new Stage());
                         }
                     });
@@ -417,6 +426,7 @@ class HealthHistoryNurse extends Application {
             for (int i = 0; i < FILE_PATHS.length; i++) {
                 writeToTextFile(FILE_PATHS[i], textAreas[i]);
             }
+            primaryStage.close();
         });
 
         gridPane.add(submitButton, 0, 4, 3, 1);
