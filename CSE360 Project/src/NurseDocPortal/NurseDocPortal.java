@@ -34,9 +34,58 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
+<<<<<<< HEAD
 
 
 public class Main extends Application {
+=======
+//public void File Reader() {
+//    public void start(Stage primaryStage) {
+//        VBox root = new VBox(10);
+//        root.setPadding(new Insets(20));
+//
+//        Button browseButton = new Button("Browse Patient Directory");
+//
+//        VBox fileListContainer = new VBox(5);
+//
+//        browseButton.setOnAction(e -> {
+//            String pathToPatientFolder = "C:\\Users\\aksha\\OneDrive\\Documents\\Java Programs\\NursePortal\\" + PATIENT_FOLDER_NAME; // Modify this with the actual path
+//            File patientFolder = new File(pathToPatientFolder);
+//            fileListContainer.getChildren().clear();
+//            if (patientFolder.exists() && patientFolder.isDirectory()) {
+//                File[] visitFiles = patientFolder.listFiles();
+//                if (visitFiles != null) {
+//                    for (File visitFile : visitFiles) {
+//                        if (visitFile.isFile() && visitFile.getName().endsWith(".txt")) {
+//                        	Button fileButton = new Button(visitFile.getName());
+//                            fileListContainer.getChildren().add(fileButton);
+//                        }
+//                    }
+//                }
+//            } else {
+//                fileListContainer.getChildren().add(new Label("Patient folder not found"));
+//            }
+//        });
+//
+//        root.getChildren().addAll(browseButton, fileListContainer);
+//
+//        Scene scene = new Scene(root, 400, 200);
+//        primaryStage.setScene(scene);
+//        primaryStage.setTitle("Doctor's Office App");
+//        primaryStage.show();
+//    }
+//}
+public class NurseDocPortal extends Application {
+	
+	public String uid;
+	
+	public NurseDocPortal(String userInput) {
+		// TODO Auto-generated constructor stub
+		this.uid = userInput;
+	}
+
+
+>>>>>>> branch 'main' of https://github.com/CSE360-Th30-Project/CSE360-Project-Team-Th30.git
 	@Override
 	public void start(Stage primaryStage) {
 		
@@ -71,7 +120,7 @@ public class Main extends Application {
 		Label TL = new Label("Welcome to Heart Health Imaging and Recording System");
 		TL.setStyle("-fx-font-size: 12px;");
 		TL.setPadding(new Insets(0, 0, 0, 40));
-		 StackPane.setAlignment(TL, Pos.CENTER);
+		StackPane.setAlignment(TL, Pos.CENTER);
 		
 		//Dynamic Size
 		VBox.setVgrow(v1, Priority.ALWAYS);
@@ -101,9 +150,19 @@ public class Main extends Application {
 
         // Event handling for Button 3
         n3.setOnAction(e -> {
+<<<<<<< HEAD
 
 //        	 HealthHistoryDoctor hhd = new  HealthHistoryDoctor();
 //             hhd.start(new Stage());
+=======
+            // Navigate to Class3 when Button 3 is clicked
+//            PatientID pid = new PatientID();
+//            pid.start(new Stage());
+            HealthHistoryDoctor hhd = new HealthHistoryDoctor("accounts/" + uid);
+        	hhd.start(new Stage());
+//        	HealthInformationForm hif = new HealthInformationForm();
+//        	hif.start(new Stage());
+>>>>>>> branch 'main' of https://github.com/CSE360-Th30-Project/CSE360-Project-Team-Th30.git
         
         });
 	}
@@ -171,8 +230,13 @@ class PatientFolderOpen extends Application {
         VBox fileListContainer = new VBox(5);
         
         newVisitButton.setOnAction(e -> {
+<<<<<<< HEAD
         	 String pathToPatientFolder = "accounts/" + PATIENT_FOLDER_NAME + File.separator + "visits/"; 
             newVisit.createFolder(pathToPatientFolder);
+=======
+        	 String pathToPatientFolder = "accounts/" + PATIENT_FOLDER_NAME +"/"; 
+            newVisit.createFolder();
+>>>>>>> branch 'main' of https://github.com/CSE360-Th30-Project/CSE360-Project-Team-Th30.git
         });
         browseButton.setOnAction(e -> {
             String pathToPatientFolder = "accounts/" + PATIENT_FOLDER_NAME + File.separator + "visits/"; // Modify this with the actual path
@@ -214,16 +278,21 @@ class PatientFolderOpen extends Application {
 
 class newVisit{
 
+<<<<<<< HEAD
     public static void createFolder(String folderPath){
     	String directoryPath = folderPath;
+=======
+    public static void createFolder(String patientName){
+        // Specify the directory path where you want to create the patient folder
+        String directoryPath = "accounts/" + patientName + "/visits/";
+
+>>>>>>> branch 'main' of https://github.com/CSE360-Th30-Project/CSE360-Project-Team-Th30.git
         // Get current date in MM-DD-YYYY format
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
         String currentDate = dateFormat.format(new Date());
 
         // Create folder with current date in the specified directory
-        String folderName = currentDate;
-        File directory = new File(directoryPath);
-        File folder = new File(directory, folderName);
+        File folder = new File(directoryPath + File.separator + currentDate + File.separator);
         if (!folder.exists()) {
             if (folder.mkdir()) {
                 System.out.println("Folder created: ");
@@ -556,6 +625,128 @@ class HealthHistoryDoctor extends Application {
         }
     }
 
+<<<<<<< HEAD
+=======
+    // Method to display patient information
+    private void showPatientInfo(int totalAgatstonCACScore, int lm, int lad, int lcx, int rca, int pda) {
+        // Implement logic to display patient information in your application
+        System.out.println("Total Agatston CAC score: " + totalAgatstonCACScore);
+        System.out.println("LM: " + lm);
+        System.out.println("LAD: " + lad);
+        System.out.println("LCX: " + lcx);
+        System.out.println("RCA: " + rca);
+        System.out.println("PDA: " + pda);
+    }
+
+    // Method to show alert message
+    private void showAlert(String message) {
+        // Implement alert message display here
+        System.out.println("Alert: " + message);
+    }
+    
+   
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
+
+class PatientView extends Application{
+	
+	private String patientID;
+	 String filename = patientID + "CTResults.txt";
+     
+     String totalAgatstonCACScore = "";
+     String lm = "";
+     String lad = "";
+     String lcx = "";
+     String rca = "";
+     String pda = "";
+     String name = "";
+	 
+	public PatientView(String patientID) {
+	        this.patientID = patientID;
+	}
+	
+	
+    public void start(Stage primaryStage) {
+
+    	 try (BufferedReader reader = new BufferedReader(new FileReader(patientID + "CTResults.txt"))) {
+             // Read each line from the file
+             totalAgatstonCACScore = reader.readLine();
+             lm = reader.readLine();
+             lad = reader.readLine();
+             lcx = reader.readLine();
+             rca = reader.readLine();
+             pda = reader.readLine();
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
+    	 
+    	 try (BufferedReader reader = new BufferedReader(new FileReader(patientID + "_PatientInfo.txt"))) {
+             // Read each line from the file
+             reader.readLine();
+             name = reader.readLine();
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
+    	 
+        // Labels and TextFields for HBox h2
+        Label l2 = new Label("The total Agatston CAC score:");
+        TextField t2 = new TextField(totalAgatstonCACScore);
+        t2.setEditable(false);
+
+        HBox h2 = new HBox(50, l2, t2);
+
+        // HBoxes for labels l4 to l8
+        TextField t3 = new TextField(lm);
+        t3.setEditable(false);
+        HBox h4 = new HBox(new Label("LM:"), t3);
+        h4.setSpacing(10);
+        
+        TextField t4 = new TextField(lad);
+        t4.setEditable(false);
+        HBox h5 = new HBox(new Label("LAD:"), t4);
+        h5.setSpacing(10);
+        
+        TextField t5 = new TextField(lcx);
+        t5.setEditable(false);
+        HBox h6 = new HBox(new Label("LCX:"), t5);
+        h6.setSpacing(10);
+        
+        TextField t6 = new TextField(rca);
+        t6.setEditable(false);
+        HBox h7 = new HBox(new Label("RCA:"), t6);
+        h7.setSpacing(10);
+        
+        TextField t7 = new TextField(pda);
+        t7.setEditable(false);
+        HBox h8 = new HBox(new Label("PDA:"), t7);
+        h8.setSpacing(10);
+
+        // VBox to stack HBoxes vertically
+        VBox v = new VBox(20, h2, h4, h5, h6, h7, h8);
+        v.setAlignment(Pos.CENTER);
+        v.setPadding(new Insets(10));
+
+        // Title label
+        Label TL = new Label("Hello Patient " + name.substring(12));
+        TL.setStyle("-fx-font-size: 12px;");
+        TL.setPadding(new Insets(0, 0, 0, 150));
+
+        // Set up BorderPane
+        BorderPane bp = new BorderPane();
+        bp.setTop(TL);
+        bp.setCenter(v);
+
+        // Set up the scene
+        Scene scene = new Scene(bp, 400, 400);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Patient View");
+        primaryStage.show();
+    }
+    
+>>>>>>> branch 'main' of https://github.com/CSE360-Th30-Project/CSE360-Project-Team-Th30.git
     public static void main(String[] args) {
         launch(args);
     }
