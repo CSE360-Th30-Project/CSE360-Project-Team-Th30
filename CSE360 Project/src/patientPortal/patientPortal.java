@@ -1,8 +1,9 @@
-package application;
+package patientPortal;
 	
 
 
 import javafx.application.Application;
+import CommunicationPage.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -13,9 +14,17 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+public class patientPortal extends Application {
+	
+	public String uid;
 
+	public patientPortal(String uid) {
+		this.uid = uid;
+		
+	}
+	
     private BorderPane borderPane = new BorderPane();
+    private Stage primaryStage = new Stage();
     private VBox mainContent = new VBox(40); // Increased vertical spacing for the main content
 
     private void showContent(String text) {
@@ -46,17 +55,7 @@ public class Main extends Application {
         return button;
     }
 
-    private VBox createLeftMenu() {
-        VBox leftMenu = new VBox(30); // Increased spacing
-        leftMenu.setPadding(new Insets(15));
-        leftMenu.getChildren().addAll(
-                createButton("Patient Info", Color.web("#4A90E2"), Color.WHITE),
-                createButton("Doctor Recommendations", Color.web("#4A90E2"), Color.WHITE),
-                createButton("Message Doctor", Color.web("#4A90E2"), Color.WHITE),
-                createButton("Settings", Color.web("#4A90E2"), Color.WHITE)
-        );
-        return leftMenu;
-    }
+
 
     private HBox createVitalSignsSection() {
         HBox vitalSigns = new HBox(10);
@@ -99,8 +98,25 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+    
+    private VBox createLeftMenu() {
+        VBox leftMenu = new VBox(30); // Increased spacing
+        leftMenu.setPadding(new Insets(15));
+        leftMenu.getChildren().addAll(
+                createButton("Patient Info", Color.web("#4A90E2"), Color.WHITE),
+                createButton("Doctor Recommendations", Color.web("#4A90E2"), Color.WHITE)
+        );
+        
+        Button messageDoctor =  createButton("Message Doctor", Color.web("#4A90E2"), Color.WHITE);
+        communicationPage chat = new communicationPage(this.uid);
+        messageDoctor.setOnAction(e -> chat.start(primaryStage));
+        leftMenu.getChildren().addAll(
+        		messageDoctor,
+        		createButton("Settings", Color.web("#4A90E2"), Color.WHITE)
+        );
 
-    public static void main(String[] args) {
-        launch(args);
+        
+        return leftMenu;
     }
+
 }

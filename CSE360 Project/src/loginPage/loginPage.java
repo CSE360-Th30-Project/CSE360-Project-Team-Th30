@@ -1,6 +1,7 @@
 package loginPage;
 
 import java.io.BufferedWriter;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,8 +20,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
+import patientPortal.*;
+import CommunicationPage.*;
+import NurseDocPortal.*;
 
 public class loginPage extends Application {
     private String pPass = "12345";
@@ -31,9 +34,6 @@ public class loginPage extends Application {
     private String passInput = "";
     Font timesNewRomanFont = Font.font("Times New Roman", 20);
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 
     public void start(Stage primaryStage) {
     	
@@ -54,7 +54,7 @@ public class loginPage extends Application {
 
         String currentDirectory = System.getProperty("user.dir");
         String imageName = "HealthCoLogo.jpg";
-        imagePath = "file:" + currentDirectory + "CSE 360" + File.seperator + "src" + File.separator "resources" + imageName;
+        String imagePath = "file:" + currentDirectory + File.separator + "CSE360 Project" + File.separator + "src" + File.separator + "resources" + File.separator + imageName;
         Image logoImage = new Image(imagePath);
         ImageView logo = new ImageView(logoImage);
         logo.setPreserveRatio(true);
@@ -62,7 +62,7 @@ public class loginPage extends Application {
         logo.setFitHeight(225);
 
         imageName = "lock.png";
-        imagePath = "file:" + currentDirectory + "CSE 360" + File.seperator + "src" + File.separator "resources" + imageName;
+        imagePath = "file:" + currentDirectory + File.separator + "CSE360 Project" + File.separator + "src" + File.separator + "resources" + File.separator +imageName;
         Image lockImage = new Image(imagePath);
         ImageView lock = new ImageView(lockImage);
         lock.setPreserveRatio(true);
@@ -70,7 +70,7 @@ public class loginPage extends Application {
         lock.setFitHeight(35);
 
         imageName = "profile.png";
-        imagePath = "file:" + currentDirectory + "CSE 360" + File.seperator + "src" + File.separator "resources" + imageName;
+        imagePath = "file:" + currentDirectory + File.separator + "CSE360 Project" + File.separator + "src" + File.separator + "resources" + File.separator + imageName;
         Image profileImage = new Image(imagePath);
         ImageView profile = new ImageView(profileImage);
         profile.setPreserveRatio(true);
@@ -106,29 +106,28 @@ public class loginPage extends Application {
                 passInput = password.getText();
                 respondString.setText("");
                 
-                System.out.print(System.getProperty("user.dir")); 
-                String currentDirectory = System.getProperty("user.dir") + File.seperator + "CSE360 Project" + File.seperator + "src" +  File.seperator + "accounts" + File.seperator + userInput;
-                File directory = new File(currentDirectory);
-                
+                communicationPage log = new communicationPage(userInput);
                 
                 if(userInput.isBlank() || passInput.isBlank()) {
                 	respondString.setText("Please fill out all fields.");
                 }
-                else if(directory.exists()) {
-                	if (userInput.charAt(0) == 'P' && passInput.equals(pPass)) {
+                else if(log.login(userInput, passInput)) {
+                	if (userInput.charAt(0) == 'P') {
                         buttonResponse('P');
                         respondString.setText("");
                         user.setText("");
                         password.setText("");
+                        
+                        
                     } 
-                    else if (userInput.charAt(0) == 'D' && passInput.equals(pPass)) {
+                    else if (userInput.charAt(0) == 'D' ) {
                     	buttonResponse('D');
                     	respondString.setText("");
                     	user.setText("");
                         password.setText("");
                         
                     } 
-                    else if (userInput.charAt(0) == 'N' && passInput.equals(pPass)) {
+                    else if (userInput.charAt(0) == 'N') {
                     	buttonResponse('N');
                     	respondString.setText("");
                     	user.setText("");
@@ -158,7 +157,9 @@ public class loginPage extends Application {
 
         originalScene = new Scene(root, 800, 600);
         primaryStage.setScene(originalScene);
+
         primaryStage.show();
+        
     }
 
     private void buttonResponse(char role) {
@@ -171,12 +172,19 @@ public class loginPage extends Application {
         Label viewLabel = new Label("");
         if(role == 'P') {
         	viewLabel.setText("Implementation of Patient View");
+            patientPortal a = new patientPortal(userInput);
+            a.start(primaryStage);
         }
         else if(role == 'D') {
         	viewLabel.setText("Implementation of Doctor View");
+        	NurseDocPortal b = new NurseDocPortal(userInput);
+        	b.start(primaryStage);
+
         }
         else if(role == 'N') {
         	viewLabel.setText("Implementation of Nurse View");
+        	NurseDocPortal b = new NurseDocPortal(userInput);
+        	b.start(primaryStage);
         }
         
         Button backButton = new Button("Back");
@@ -189,10 +197,6 @@ public class loginPage extends Application {
 
         overlayLayout.getChildren().addAll(viewLabel, backButton);
 
-        Scene overlayScene = new Scene(overlayLayout, 800, 600);
-
-        primaryStage.setScene(overlayScene);
-        primaryStage.setTitle("Placeholder View");
         primaryStage.show();
     }
     
@@ -277,16 +281,18 @@ public class loginPage extends Application {
             public void handle(ActionEvent event) {
             	if(!fnInput.getText().isEmpty() && !lnInput.getText().isEmpty() && !bdInput.getText().isEmpty() && !psInput.getText().isEmpty()) {
             		if(bdInput.getText().length() == 10) {
-            			
             	        String currentDirectory = System.getProperty("user.dir");
             	        String dirName = "P" + fnInput.getText() + lnInput.getText() + "_" + bdInput.getText().substring(0,2) + "-" + bdInput.getText().substring(3,5) + "-" + bdInput.getText().substring(6,10);  
             			String directoryPath = currentDirectory + File.separator + "accounts" + File.separator + dirName;
+            			String directoryChatPath = directoryPath + File.separator + "chat" + File.separator;
             			String fileName = "patientPass.txt";
             			String filePath = directoryPath + File.separator + fileName;
             	        
             	        File directory = new File(directoryPath);
+            	        File chatDirectory = new File(directoryChatPath);
             	        if (!directory.exists()) {
             	            directory.mkdirs();
+            	            chatDirectory.mkdirs();
             	        }
             	        else {
             	        	pIntakeLabel.setText("Patient Already Exists.");
@@ -329,5 +335,9 @@ public class loginPage extends Application {
          primaryStage.setScene(createAccountView);
          primaryStage.setTitle("Create Account");
          primaryStage.show();
+    }
+    
+    public static void main(String[] args) {
+        launch(args);
     }
 }
