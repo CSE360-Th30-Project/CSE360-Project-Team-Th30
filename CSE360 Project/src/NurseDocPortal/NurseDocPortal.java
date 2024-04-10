@@ -1,4 +1,4 @@
-package application;
+package NurseDocPortal;
 	
 
 import javafx.application.Application;
@@ -65,7 +65,7 @@ import java.util.Date;
 //        primaryStage.show();
 //    }
 //}
-public class Main extends Application {
+public class NurseDocPortal extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		
