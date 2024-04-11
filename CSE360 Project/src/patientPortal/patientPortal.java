@@ -211,6 +211,7 @@ public class patientPortal extends Application {
         VBox leftMenu = createLeftMenu();
         HBox vitalSigns = createVitalSignsSection();
         VBox otherCategories = createOtherCategoriesSection();
+        String work = "work";
 
         mainContent.getChildren().addAll(vitalSigns, otherCategories);
         mainContent.setAlignment(Pos.TOP_CENTER); // Align the main content to the top center
