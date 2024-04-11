@@ -409,17 +409,19 @@ class HealthHistoryNurse extends Application {
 	public HealthHistoryNurse(String folderPath) {
 		System.out.println("Constructor called");
 		FILE_PATHS = new String[]{
-                folderPath + "/previousHealthIssues.txt",
-                folderPath + "/healthConcerns.txt",
-                folderPath + "/recommendations.txt",
-                folderPath + "/knownAllergies.txt",
-                folderPath + "/previousMedication.txt",
-                folderPath + "/immunizationRecords.txt"
+                folderPath + "\\previousHealthIssues.txt",
+                folderPath + "\\healthConcerns.txt",
+                folderPath + "\\recommendations.txt",
+                folderPath + "\\knownAllergies.txt",
+                folderPath + "\\previousMedication.txt",
+                folderPath + "\\immunizationRecords.txt",
+                folderPath + "\\physicalTestResult.txt",
+                folderPath + "\\prescribedMeds.txt",
+                folderPath + "\\pharmacy.txt"
         };
     }
 
-
-    private TextArea[] textAreas = new TextArea[6];
+    private TextArea[] textAreas = new TextArea[9];
 
     @Override
     public void start(Stage primaryStage) {
@@ -442,10 +444,9 @@ class HealthHistoryNurse extends Application {
             for (int i = 0; i < FILE_PATHS.length; i++) {
                 writeToTextFile(FILE_PATHS[i], textAreas[i]);
             }
-            primaryStage.close();
         });
 
-        gridPane.add(submitButton, 0, 4, 3, 1);
+        gridPane.add(submitButton, 0, 6, 3, 1);
 
         Scene scene = new Scene(gridPane, 800, 600);
         primaryStage.setScene(scene);
@@ -465,6 +466,12 @@ class HealthHistoryNurse extends Application {
     		return "Previous Medication";
     	}else if(i == 5) {
     		return "Immunization Records";
+    	}else if(i == 6) {
+    		return "Physical Test Result";
+    	}else if(i == 7) {
+    		return "Prescribed Meds";
+    	}else if(i == 8) {
+    		return "Pharmacy";
     	}
     	return "----";
     }
@@ -493,32 +500,25 @@ class HealthHistoryNurse extends Application {
 }
 
 class HealthHistoryDoctor extends Application {
-	
-	String folderPath = ""; 
+	String[] FILE_PATHS;
+	String folderPath; 
 
-	public HealthHistoryDoctor(String folderPath) {
-        this.folderPath = folderPath;
-        initializeFilePaths(); // Call method to initialize FILE_PATHS
-    }
-
-    // Method to initialize FILE_PATHS
-    private void initializeFilePaths() {
-        FILE_PATHS = new String[]{
-                folderPath + "/previousHealthIssues.txt",
-                folderPath + "/healthConcerns.txt",
-                folderPath + "/recommendations.txt",
-                folderPath + "/knownAllergies.txt",
-                folderPath + "/previousMedication.txt",
-                folderPath + "/immunizationRecords.txt"
+	public HealthHistoryNurse(String folderPath) {
+		System.out.println("Constructor called");
+		FILE_PATHS = new String[]{
+                folderPath + "\\previousHealthIssues.txt",
+                folderPath + "\\healthConcerns.txt",
+                folderPath + "\\recommendations.txt",
+                folderPath + "\\knownAllergies.txt",
+                folderPath + "\\previousMedication.txt",
+                folderPath + "\\immunizationRecords.txt",
+                folderPath + "\\physicalTestResult.txt",
+                folderPath + "\\prescribedMeds.txt",
+                folderPath + "\\pharmacy.txt"
         };
     }
 
-    // Array to hold file paths
-    private String[] FILE_PATHS;
-    
-
-
-    private TextArea[] textAreas = new TextArea[FILE_PATHS.length];
+    private TextArea[] textAreas = new TextArea[9];
 
     @Override
     public void start(Stage primaryStage) {
@@ -527,6 +527,9 @@ class HealthHistoryDoctor extends Application {
         for (int i = 0; i < FILE_PATHS.length; i++) {
             Label label = new Label(setLabel(i));
             TextArea textArea = new TextArea();
+            if(i == 2) {
+            	textArea.setEditable(true);
+            }
             textAreas[i] = textArea;
             readFileIntoTextArea(textArea, FILE_PATHS[i]);
             gridPane.add(label, i % 3, 2 * (i / 3));
@@ -540,7 +543,7 @@ class HealthHistoryDoctor extends Application {
             }
         });
 
-        gridPane.add(submitButton, 0, 4, 3, 1);
+        gridPane.add(submitButton, 0, 6, 3, 1);
 
         Scene scene = new Scene(gridPane, 800, 600);
         primaryStage.setScene(scene);
@@ -560,8 +563,14 @@ class HealthHistoryDoctor extends Application {
     		return "Previous Medication";
     	}else if(i == 5) {
     		return "Immunization Records";
+    	}else if(i == 6) {
+    		return "Physical Test Result";
+    	}else if(i == 7) {
+    		return "Prescribed Meds";
+    	}else if(i == 8) {
+    		return "Pharmacy";
     	}
-    	return "NULL";
+    	return "----";
     }
     
     private void readFileIntoTextArea(TextArea textArea, String filePath) {
