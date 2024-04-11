@@ -3,8 +3,6 @@ Team Repository for CSE 360 Project
 
 (Note this is committed by Ivan on my account as his account could not push after alot of troubleshooting)
 
-*/
-
 Health Co. Healthcare
 
 Team Member Names:
@@ -50,4 +48,3 @@ HealthCoe is an effective and visually appealing healthcare application that aim
 
 
 
-*/
