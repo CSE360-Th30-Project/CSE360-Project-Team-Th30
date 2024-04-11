@@ -503,7 +503,7 @@ class HealthHistoryDoctor extends Application {
 	String[] FILE_PATHS;
 	String folderPath; 
 
-	public HealthHistoryNurse(String folderPath) {
+	public HealthHistoryDoctor(String folderPath) {
 		System.out.println("Constructor called");
 		FILE_PATHS = new String[]{
                 folderPath + "\\previousHealthIssues.txt",
