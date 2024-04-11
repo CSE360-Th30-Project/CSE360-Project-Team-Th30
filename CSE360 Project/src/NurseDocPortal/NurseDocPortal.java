@@ -358,9 +358,23 @@ class readVitals extends Application{
 	        t7.setEditable(true);
 	        HBox h8 = new HBox(new Label("Blood Pressure:"), t7);
 	        h8.setSpacing(10);
+	        
+	        Button submitButton = new Button("Submit");
+	        submitButton.setOnAction(e -> {
+	            try (FileWriter writer = new FileWriter(folderPath)) {
+	                writer.write(t3.getText() + "\n");
+	                writer.write(t4.getText() + "\n");
+	                writer.write(t5.getText() + "\n");
+	                writer.write(t6.getText() + "\n");
+	                writer.write(t7.getText() + "\n");
+	            } catch (IOException ex) {
+	                ex.printStackTrace();
+	            }
+	        });
+	        
 
 	        // VBox to stack HBoxes vertically
-	        VBox v = new VBox(20, h4, h5, h6, h7, h8);
+	        VBox v = new VBox(20, h4, h5, h6, h7, h8, submitButton);
 	        v.setAlignment(Pos.CENTER);
 	        v.setPadding(new Insets(10));
 
