@@ -318,7 +318,7 @@ class readVitals extends Application{
 	     String BloodPressure = "";
 	     
 	     public readVitals(String folderPath) {
-		        this.folderPath = folderPath;
+		        this.folderPath = folderPath + "\\vitals.txt";
 		}
 		
 	    public void start(Stage primaryStage) {
@@ -372,6 +372,7 @@ class readVitals extends Application{
 	            } catch (IOException ex) {
 	                ex.printStackTrace();
 	            }
+	            primaryStage.close();
 	        });
 	        
 
@@ -444,6 +445,7 @@ class HealthHistoryNurse extends Application {
             for (int i = 0; i < FILE_PATHS.length; i++) {
                 writeToTextFile(FILE_PATHS[i], textAreas[i]);
             }
+            primaryStage.close();
         });
 
         gridPane.add(submitButton, 0, 6, 3, 1);
@@ -541,6 +543,7 @@ class HealthHistoryDoctor extends Application {
             for (int i = 0; i < FILE_PATHS.length; i++) {
                 writeToTextFile(FILE_PATHS[i], textAreas[i]);
             }
+            primaryStage.close();
         });
 
         gridPane.add(submitButton, 0, 6, 3, 1);
