@@ -33,6 +33,7 @@ import java.util.Date;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import CommunicationPage.*;
 
 
 
@@ -51,7 +52,7 @@ public class NurseDocPortal extends Application {
 		//V1
 //		Label l1 = new Label("Eat:");
 		Button n1 = new Button("Search Patient");
-		Button n3 = new Button("Doctors View");
+		Button n3 = new Button("Communicate");
 		
 		 // Set preferred width and height for all buttons
         double preferredWidth = 150;
@@ -109,7 +110,8 @@ public class NurseDocPortal extends Application {
 
         // Event handling for Button 3
         n3.setOnAction(e -> {
-
+        	communicationPage commPage = new communicationPage(this.uid);
+        	commPage.start(primaryStage);
 //        	 HealthHistoryDoctor hhd = new  HealthHistoryDoctor();
 //             hhd.start(new Stage());
         
